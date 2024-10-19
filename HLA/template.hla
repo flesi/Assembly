@@ -1,0 +1,17 @@
+program NombreDelPrograma;
+#include("stdlib.hhf")  // Incluir librerías
+
+// Declaraciones globales
+type
+    // Definición de nuevos tipos de datos (struct, union, etc.)
+static
+    // Definición de variables estáticas (globales)
+var
+    // Definición de variables locales (usualmente en la pila)
+const
+    // Definición de constantes
+
+begin NombreDelPrograma;
+    // Código del programa
+    // Instrucciones y lógica del programa
+end NombreDelPrograma;
