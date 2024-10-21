@@ -1,3 +1,21 @@
+-  [HLA (High Level Assembler)](#1)
+- [Estructura de un Programa en HLA](#2)
+    <!-- - Sección `type`
+    - Sección `static`
+    - Sección `var`
+    - Sección `const`
+    - Sección `readonly`
+    - Sección `storage`
+    - Sección `procedure`
+    - Sección `begin`...`end` -->
+- [Registros](#3)
+- [Tipos de datos](#4)
+- [Estructuras de control](#5)
+- [Librerias](#6)
+
+
+<div id='1'></div>
+
 # HLA (High Level Assembler)
 
 El lenguaje de programación HLA (High Level Assembler) es un lenguaje ensamblador de alto nivel diseñado para facilitar la programación en lenguaje de máquina, al ofrecer una sintaxis más comprensible y accesible. Fue creado por Randall Hyde y se utiliza principalmente para la enseñanza de la programación de sistemas y el desarrollo de software de bajo nivel.
@@ -16,9 +34,12 @@ El lenguaje de programación HLA (High Level Assembler) es un lenguaje ensamblad
 
 https://randallhyde.com/AssemblyLanguage/HighLevelAsm/
 
+
+<div id='2'></div>
+
 # Estructura de un Programa en HLA
 
-```hla
+```asm
     program NombreDelPrograma;
     #include("stdlib.hhf")  // Incluir librerías
 
@@ -42,7 +63,7 @@ https://randallhyde.com/AssemblyLanguage/HighLevelAsm/
 
 La sección `type` se utiliza para definir nuevos tipos de datos. Estos pueden ser estructuras (`struct`), uniones (`union`), punteros (`ptr`), arrays, o cualquier otro tipo de dato personalizado que desees crear. Esta sección es opcional y se utiliza principalmente cuando necesitas tipos de datos complejo
 
-```
+```asm
 type
     Person: struct
         name: string;
@@ -50,7 +71,6 @@ type
     endstruct;
 
     ptrPerson: ptr32 to Person;  // Puntero a la estructura Person
-
 ```
 
 Explicación: Aquí definimos un tipo `Person` que es una estructura con un campo `name` de tipo `string` y un campo `age` de tipo `int32`. También definimos un puntero (`ptrPerson`) que apunta a este tipo de estructura.
@@ -73,7 +93,7 @@ static
 
 La sección `var` se utiliza para declarar variables locales que suelen asignarse en la pila (stack). Estas variables existen solo dentro del bloque de código donde fueron declaradas y se eliminan automáticamente cuando ese bloque termina. Esta sección es comúnmente utilizada para variables temporales que no requieren persistir durante todo el programa.
 
-```
+```asm
 begin MiPrograma;
     var
         tempValue: int32;
@@ -92,7 +112,7 @@ end MiPrograma;
 
 La sección `const` se utiliza para declarar constantes, es decir, valores que no cambian durante la ejecución del programa. Las constantes son útiles para valores que necesitas reutilizar sin permitir que su valor sea modificado.
 
-```
+```asm
 const
     PI: real4 := 3.141592;  // Definir la constante PI
     MAX_VALUE: int32 := 100;
@@ -104,7 +124,7 @@ const
 
 Esta sección se utiliza para declarar datos que no se pueden modificar durante la ejecución del programa, pero que no son exactamente constantes en el sentido de `const`. Se utiliza comúnmente para almacenar valores de solo lectura, como cadenas de caracteres o tablas de búsqueda.
 
-```
+```asm
 readonly
     errorMessage: string := "Error: Operation failed!";
 ```
@@ -116,7 +136,7 @@ readonly
 
 La sección storage se usa para reservar un bloque de memoria sin inicializar. Es útil cuando solo necesitas declarar el espacio para almacenar datos, pero no necesitas darle un valor inicial de inmediato.
 
-```
+```asm
 storage
     buffer: byte[1024];  // Reserva un buffer de 1024 bytes
 ```
@@ -127,7 +147,7 @@ storage
 
 En HLA, puedes definir procedimientos (funciones) usando el bloque `procedure`. Los procedimientos encapsulan un conjunto de instrucciones que pueden ser reutilizadas en diferentes partes del programa.
 
-```
+```asm
 procedure Sumar( a: int32; b: int32 ); @nodisplay;
 begin Sumar;
     mov( a, eax );
@@ -137,12 +157,12 @@ end Sumar;
 
 <b>Explicación:</b> Aquí definimos un procedimiento llamado `Sumar` que toma dos parámetros `a` y `b` de tipo `int32`. Suma `a` y `b`, almacenando el resultado en el registro `eax`.
 
-## Seccion `begin` y `end`
+## Seccion `begin` ... `end`
 
 La sección `begin ... end` contiene el código principal del programa. Todo lo que esté dentro 
 de este bloque es ejecutado cuando el programa comienza.
 
-```
+```asm
 begin MiPrograma;
     // Código del programa
     stdout.put( "Hola, Mundo!", nl );
@@ -164,6 +184,9 @@ end MiPrograma;
 - `readonly`: Define datos que son de <b>solo lectura</b> y que no se pueden modificar una vez que son inicializados, pero no son estrictamente "constantes".
 
 - `storage`: Reserva <b>memoria sin inicializar</b>. Es útil para crear buffers o reservar espacio para datos sin asignarles valores inicialmente.
+
+
+<div id='3'></div>
 
 # Registros
 
@@ -254,6 +277,7 @@ Esta tabla presenta los registros especiales utilizados para gestión de la pila
 | `OF`                          | 1 (`FLAG`)    | Overflow Flag	                             | Indica un desbordamiento aritmético                   |
 | `R8-R15`                      | 64            | Registros adicionales de propósito general | Disponibles solo en arquitecturas de 64 bits          |
 
+<div id='4'></div>
 
 # TIPOS DE DATOS
 
@@ -290,7 +314,7 @@ Estos tipos de datos representan tanto números negativos como positivos, usando
     - <b>Valor mínimo: </b> `-128` (es decir, -2<sup>7</sup>)</b>
     - Ejemplo
 
-    ```
+    ```asm
     int8Var: int8 := 127;
     ```
 
@@ -299,7 +323,7 @@ Estos tipos de datos representan tanto números negativos como positivos, usando
     - <b>Valor mínimo: </b> `-32768` (es decir, -2<sup>15</sup>)</b>
     - Ejemplo
 
-    ```
+    ```asm
     int32Var: int32 := 2147483647;
     ```
 
@@ -308,7 +332,7 @@ Estos tipos de datos representan tanto números negativos como positivos, usando
     - <b>Valor mínimo: </b> `-2147483648` (es decir, -2<sup>31</sup>)</b>
     - Ejemplo
 
-    ```
+    ```asm
     int32Var: int32 := 2147483647;
     ```
 
@@ -317,7 +341,7 @@ Estos tipos de datos representan tanto números negativos como positivos, usando
     - <b>Valor mínimo: </b> `-9223372036854775808` (es decir, -2<sup>63</sup>)</b>
     - Ejemplo
 
-    ```
+    ```asm
     int64Var: int64 := 9223372036854775807;
     ```
 
@@ -333,17 +357,17 @@ Estos tipos se utilizan para almacenar números reales que incluyen una parte de
 
 - `real4` <b>(32 bits)</b>: También conocido como <b>precisión simple</b>. Este tipo usa 32 bits para almacenar números en formato de punto flotante. Es equivalente al tipo `float` en otros lenguajes de programación.
     - Valor máximo aproximado: `3.40282347E+38`
-    ```
+    ```asm
     real4Var: real4 := 3.40282347E+38;
     ```
 - `real8` <b>(64 bits)</b>: También conocido como precisión doble. Este tipo utiliza 64 bits y es equivalente al tipo `double` en otros lenguajes.
     - Valor máximo aproximado: `1.7976931348623157E+308`
-    ```
+    ```asm
     real8Var: real8 := 3.40282347E+38;
     ```
 - `real10` <b>(80 bits)</b>: También conocido como precisión extendida. Este tipo usa 80 bits y es más específico de ciertas arquitecturas de procesador como las x86, donde existe soporte para cálculos de precisión extendida en hardware.
     - Valor máximo aproximado: `1.18973149535723176508575932662800702E+4932`
-    ```
+    ```asm
     real80Var: real80 := 1.18973149535723176508575932662800702E+4932;
     ```
 
@@ -355,7 +379,7 @@ Un puntero es una variable que contiene la dirección de memoria de otra variabl
 | `ptr64`      | 64 bits         | Puntero de 64 bits. Se usa en arquitecturas de 64 bits, como en sistemas modernos de 64 bits. |
 
 - <b>Punteros de 32 bits (`ptr32`)</b>
-    ```
+    ```asm
     program Ptr32Example;
     #include("stdlib.hhf")
 
@@ -385,7 +409,7 @@ Un puntero es una variable que contiene la dirección de memoria de otra variabl
 
 - <b>Punteros de 64 bits (`ptr64`)</b>
 
-    ```
+    ```asm
     program Ptr64Example;
     #include("stdlib.hhf")
 
@@ -425,17 +449,17 @@ Además de los tipos numéricos y flotantes, HLA ofrece algunos tipos de datos c
 
 - <b>char</b> 1 byte
     - Valor máximo: 255 (es un valor sin signo, por lo que puede almacenar un carácter con código ASCII desde 0 hasta 255)
-    ```
+    ```asm
     charVar: char := 255;
     ```
 - <b>boolean</b> 1 byte
     - Valores permitidos: `0` (falso) o `1` (Verdadero)
     - Ejemplo de declaración:
-    ```
+    ```asm
     boolVar: boolean := 1;
     ```
 - <b>String (Cadenas de caracteres)</b>
-   ```
+   ```asm
     program StringExample;
     #include("stdlib.hhf")
 
@@ -548,15 +572,250 @@ Un array es una secuencia de datos del mismo tipo. A continuación, se muestra c
     - Luego, asignamos un valor flotante (en este caso `0.0`) a `num.floatValue` usando instrucciones de la <b>unidad de punto flotante (FPU)</b>.
     - Debido a que es una unión, ambos campos ocupan el mismo espacio de memoria, así que cuando asignas un valor flotante, el valor entero ya no es válido.
 
+<div id='5'></div>
+
 # Esctructuras de Control
 
 ## Expresiones booleanas
+Las expresiones booleanas en HLA permiten evaluar condiciones para decidir si se ejecutan o no ciertos bloques de código. HLA soporta varias formas de hacer estas evaluaciones, que incluyen:
+### Comparaciones Lógicas con Operadores Relacionales
+Los operadores relacionales permiten comparar valores en registros, variables o memoria, retornando un valor booleano (verdadero o falso). Los operadores más comunes son:
+- `==` : Igual a
+- `!=` : Distinto de
+- `<` : Menor que
+- `<=` : Menor o igual que
+- `>` : Mayor que
+- `>=` : Mayor o igual que
+
+```
+if( eax == ebx ) then
+  // Se ejecuta si eax es igual a ebx
+endif;
+
+if( ecx != edx ) then
+  // Se ejecuta si ecx es distinto de edx
+endif;
+```
+
+### Operadores Lógicos
+HLA soporta operadores lógicos que se usan para combinar varias condiciones booleanas. Los más comunes son:
+
+- `&&` : `AND` lógico. Es verdadero si ambas condiciones son verdaderas.
+- `||` : `OR` lógico. Es verdadero si al menos una condición es verdadera.
+- `!` : `NOT` lógico. Niega una condición (hace que lo verdadero sea falso, y viceversa).
+
+```
+if( eax > 10 && ebx <= 20 ) then
+  // Se ejecuta si eax es mayor que 10 y ebx es menor o igual a 20
+endif;
+
+if( ecx == 0 || edx > 5 ) then
+  // Se ejecuta si ecx es 0 o edx es mayor que 5
+endif;
+
+if( !eax ) then
+  // Se ejecuta si eax es 0 (NOT niega el valor de eax)
+endif;
+```
+
+### Uso de Banderas del Procesador
+Las banderas de estado (flags) son indicadores que el procesador ajusta como resultado de una operación. Puedes usarlas directamente en las condiciones booleanas para evaluar si ciertas condiciones de la CPU son verdaderas o falsas.
+
+Las banderas más comunes son:
+
+-`@c` : Carry flag - Verdadero si el bit de acarreo está establecido (1), falso si está limpio (0).
+-`@nc` : No carry - Verdadero si el bit de acarreo está limpio (0), falso si está establecido (1).
+-`@z` : Zero flag - Verdadero si el resultado de la operación fue cero (1), falso si no lo fue (0).
+-`@nz` : Not zero - Verdadero si el resultado no fue cero (1), falso si fue cero (0).
+-`@o` : Overflow flag - Verdadero si hubo desbordamiento en una operación aritmética con signo (1), falso si no lo hubo (0).
+-`@no` : No overflow - Verdadero si no hubo desbordamiento (0), falso si lo hubo (1).
+-`@s` : Sign flag - Verdadero si el resultado fue negativo (1), falso si fue positivo (0).
+-`@ns` : No sign - Verdadero si el resultado fue positivo (0), falso si fue negativo (1).
+```
+if( @z ) then
+  // Se ejecuta si el Zero flag está activo (el resultado anterior fue 0)
+endif;
+
+if( @c ) then
+  // Se ejecuta si el Carry flag está activo (hubo acarreo)
+endif;
+
+if( @nz ) then
+  // Se ejecuta si el Zero flag no está activo (el resultado anterior no fue 0)
+endif;
+```
+
+### Uso de Variables Booleanas
+HLA permite declarar y usar variables booleanas (tipos boolean), que pueden tomar los valores true o false.
+
+- `Boolean_variable` : Una variable booleana que almacena un valor de verdad.
+- `!Boolean_variable` : Niega el valor de la variable booleana.
+
+
+```
+boolean boolVar;
+
+if( boolVar ) then
+  // Se ejecuta si boolVar es true
+endif;
+
+if( !boolVar ) then
+  // Se ejecuta si boolVar es false
+endif;
+```
+
+
+### Comparaciones entre Registros y Memoria
+Puedes comparar registros entre sí o con constantes. Esto se hace usando operadores relacionales estándar:
+
+-`mem_reg relop mem_reg_const`: Comparación entre un registro/memoria con otro registro o constante.
+```
+if( eax < ebx ) then
+  // Se ejecuta si eax es menor que ebx
+endif;
+
+if( ebx > 5 ) then
+  // Se ejecuta si ebx es mayor que 5
+endif;
+
+if( al < i8 ) then
+  // Se ejecuta si el contenido del registro al es menor que una constante de 8 bits
+endif;
+```
+
+### Comparaciones con Rangos
+Puedes verificar si el valor de un registro está dentro de un rango de valores usando in y not in.
+
+- `register in LowConst..HiConst` : Evalúa si el valor de un registro está dentro de un rango.
+- `register not in LowConst..HiConst` : Evalúa si el valor de un registro no está dentro de un rango.
+```
+if( eax in 1..100 ) then
+  // Se ejecuta si eax está en el rango [1, 100]
+endif;
+
+if( ch not in 'a'..'z' ) then
+  // Se ejecuta si el registro ch no contiene un valor entre 'a' y 'z' (caracteres ASCII)
+endif;
+```
+
+
 ## IF...THEN...ESLEIF...ELSE...ENDIF
+El condicional `if` evalúa una expresión booleana. Si la condición es verdadera, ejecuta un bloque de código. Puedes agregar bloques adicionales con `elseif` y `else`.
+<b>Sintaxis:</b>
+```
+if( condición ) then
+  // Código si la condición es verdadera
+elseif( otra_condición ) then
+  // Código si la segunda condición es verdadera
+else
+  // Código si ninguna condición es verdadera
+endif;
+```
+<b>Ejemplo:</b>
+```
+if( eax > 10 ) then
+  stdout.put( "Mayor a 10" );
+elseif( eax == 10 ) then
+  stdout.put( "Es igual a 10" );
+else
+  stdout.put( "Menor a 10" );
+endif;
+```
+
 ## WHILE...ENDWHILE
+
+El bucle `while` repite un bloque de código mientras la condición sea verdadera.
+
+
+<b>Sintaxis:</b>
+```
+while( condición ) do
+  // Código a ejecutar mientras la condición sea verdadera
+endwhile;
+```
+<b>Ejemplo:</b>
+```
+while( eax < 100 ) do
+  stdout.put( "eax: ", eax, nl );
+  inc( eax );
+endwhile;
+```
+
 ## FOR...ENDFOR
+
+El bucle `for` es usado para repetir un bloque de código un número determinado de veces.
+
+<b>Sintaxis:</b>
+```
+for( inicialización; condición; incremento ) do
+  // Código a ejecutar en cada iteración
+endfor;
+```
+<b>Ejemplo:</b>
+```
+for( mov( 0, eax ); eax < 10; inc( eax )) do
+  stdout.put( "Iteración: ", eax, nl );
+endfor;
+```
+
+
 ## REPEAT...UNTIL
+
+Este bucle ejecuta el bloque de código al menos una vez, y se repite hasta que la condición sea verdadera.
+
+
+
+<b>Sintaxis:</b>
+```
+repeat
+  // Código a ejecutar
+until( condición );
+```
+
+<b>Ejemplo:</b>
+
+```
+repeat
+  stdout.put( "Contador: ", eax, nl );
+  inc( eax );
+until( eax >= 5 );
+```
+
 ## BREAK / BREAKIF
+
+Estas instrucciones permiten salir de un bucle antes de que termine naturalmente:
+
+- `break`: Sale inmediatamente del bucle.
+- `breakif( condición )`: Sale del bucle si la condición es verdadera.
+
+<b>Sintaxis:</b>
+```
+while( true ) do
+  stdout.put( "Valor de eax: ", eax, nl );
+  inc( eax );
+  breakif( eax == 10 ); // Sale si eax es igual a 10
+endwhile;
+```
+
+
 ## FOREVER...ENDFOR
+
+El bucle forever es un bucle infinito que se ejecuta continuamente hasta que se interrumpe con un break o breakif.
+
+<b>Sintaxis:</b>
+```
+forever do
+  // Código a ejecutar infinitamente
+endfor;
+```
+<b>Ejemplo:</b>
+```
+forever do
+  stdout.put( "Bucle infinito", nl );
+  breakif( eax == 5 ); // Salida condicional del bucle
+  inc( eax );
+endfor;
+```
 
 ## Control de Excepciones
 
@@ -636,7 +895,7 @@ Un array es una secuencia de datos del mismo tipo. A continuación, se muestra c
 | ex.fUnderflow                 | Excepción de punto flotante                                                                                                |
 | ex.InvalidHandle              | El sistema operativo reportó un manejador inválido para alguna operación.                                                  |
 
-
+<div id='6'></div>
 
 # Librerías
 Resumen de Librerías 
